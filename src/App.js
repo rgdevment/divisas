@@ -18,8 +18,6 @@ function App() {
   const [showResult, setShowResult] = useState(false);
   const [originCurrency, setOriginCurrency] = useState(currencies[0]);
   const [foreignCurrency, setForeignCurrency] = useState(currencies[1]);
-  const [installPromptEvent, setInstallPromptEvent] = useState(null);
-  const [isInstalled, setIsInstalled] = useState(false);
 
   useEffect(() => {
     if (originCurrency.code === foreignCurrency.code) {
@@ -27,41 +25,6 @@ function App() {
       setForeignCurrency(currencies[nextIndex]);
     }
   }, [originCurrency, foreignCurrency]);
-
-  useEffect(() => {
-    const beforeInstallPromptListener = (event) => {
-      event.preventDefault();
-      setInstallPromptEvent(event);
-    };
-
-    window.addEventListener("beforeinstallprompt", beforeInstallPromptListener);
-
-    return () => {
-      window.removeEventListener(
-        "beforeinstallprompt",
-        beforeInstallPromptListener
-      );
-    };
-  }, []);
-
-  const handleInstallPWA = async () => {
-    if (!installPromptEvent) {
-      return;
-    }
-
-    installPromptEvent.prompt();
-
-    const { outcome } = await installPromptEvent.userChoice;
-
-    if (outcome === "accepted") {
-      console.log("User accepted the install prompt");
-    } else {
-      console.log("User dismissed the install prompt");
-    }
-
-    setInstallPromptEvent(null);
-    setIsInstalled(true);
-  };
 
   const handleConvert = (value) => {
     setAmountToConvert(value);
@@ -180,14 +143,6 @@ function App() {
           <p>
             {`${formattedAmountToConvert} ${foreignCurrency.code} equivale a ${convertedAmount} ${originCurrency.code}`}
           </p>
-        </div>
-      )}
-
-      {isInstalled && (
-        <div className="install-button-container">
-          <button className="install-button" onClick={handleInstallPWA}>
-            Agregar como aplicación
-          </button>
         </div>
       )}
     </div>
