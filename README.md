@@ -43,9 +43,9 @@ Esta es una aplicación web simple que permite convertir montos de una divisa a 
 
    La aplicación estará disponible en [http://localhost:3000](http://localhost:3000).
 
-## Personalización
+## Service Worker
 
-Puedes personalizar las divisas disponibles y sus tipos de cambio editando el archivo `src/currencies.js`. Asegúrate de seguir el formato correcto y reinicia la aplicación para que los cambios surtan efecto.
+La aplicación utiliza un Service Worker para habilitar el almacenamiento en caché y el funcionamiento sin conexión. Una vez que se carga la aplicación por primera vez, estará disponible incluso si pierdes la conexión a Internet. Ten en cuenta que el Service Worker solo funcionará en un entorno de producción.
 
 ## Contribuciones
 
