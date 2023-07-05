@@ -19,6 +19,23 @@ function App() {
   const [originCurrency, setOriginCurrency] = useState(currencies[0]);
   const [foreignCurrency, setForeignCurrency] = useState(currencies[1]);
   const [isInstallable, setIsInstallable] = useState(false);
+  const [deferredPrompt, setDeferredPrompt] = useState(null);
+  
+  window.addEventListener('beforeinstallprompt', (e) => {
+    e.preventDefault();
+    setDeferredPrompt(e);
+    setIsInstallable(true);
+  });
+  
+  const installApp = () => {
+    deferredPrompt.prompt();
+    deferredPrompt.userChoice.then((choiceResult) => {
+      if (choiceResult.outcome === 'accepted') {
+        setIsInstallable(false);
+      }
+      setDeferredPrompt(null);
+    });
+  };
 
   useEffect(() => {
     if (originCurrency.code === foreignCurrency.code) {
@@ -60,24 +77,6 @@ function App() {
   if (amountToConvert) {
     formattedAmountToConvert = numeral(amountToConvert).format('$0,0');
   }
-
-  let deferredPrompt;
-  
-  window.addEventListener('beforeinstallprompt', (e) => {
-    e.preventDefault();
-    deferredPrompt = e;
-    setIsInstallable(true);
-  });
-  
-  const installApp = () => {
-    deferredPrompt.prompt();
-    deferredPrompt.userChoice.then((choiceResult) => {
-      if (choiceResult.outcome === 'accepted') {
-        setIsInstallable(false);
-      }
-      deferredPrompt = null;
-    });
-  };
 
   return (
     <div className="App">
