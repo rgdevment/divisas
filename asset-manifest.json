@@ -1,0 +1,15 @@
+{
+  "files": {
+    "main.css": "/divisas/static/css/main.b943bc27.css",
+    "main.js": "/divisas/static/js/main.aa96ccb8.js",
+    "static/js/787.0a40e39c.chunk.js": "/divisas/static/js/787.0a40e39c.chunk.js",
+    "index.html": "/divisas/index.html",
+    "main.b943bc27.css.map": "/divisas/static/css/main.b943bc27.css.map",
+    "main.aa96ccb8.js.map": "/divisas/static/js/main.aa96ccb8.js.map",
+    "787.0a40e39c.chunk.js.map": "/divisas/static/js/787.0a40e39c.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.b943bc27.css",
+    "static/js/main.aa96ccb8.js"
+  ]
+}
