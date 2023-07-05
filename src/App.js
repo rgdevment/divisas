@@ -18,6 +18,7 @@ function App() {
   const [showResult, setShowResult] = useState(false);
   const [originCurrency, setOriginCurrency] = useState(currencies[0]);
   const [foreignCurrency, setForeignCurrency] = useState(currencies[1]);
+  const [isInstallable, setIsInstallable] = useState(false);
 
   useEffect(() => {
     if (originCurrency.code === foreignCurrency.code) {
@@ -59,6 +60,24 @@ function App() {
   if (amountToConvert) {
     formattedAmountToConvert = numeral(amountToConvert).format('$0,0');
   }
+
+  let deferredPrompt;
+  
+  window.addEventListener('beforeinstallprompt', (e) => {
+    e.preventDefault();
+    deferredPrompt = e;
+    setIsInstallable(true);
+  });
+  
+  const installApp = () => {
+    deferredPrompt.prompt();
+    deferredPrompt.userChoice.then((choiceResult) => {
+      if (choiceResult.outcome === 'accepted') {
+        setIsInstallable(false);
+      }
+      deferredPrompt = null;
+    });
+  };
 
   return (
     <div className="App">
@@ -144,6 +163,10 @@ function App() {
             {`${formattedAmountToConvert} ${foreignCurrency.code} equivale a ${convertedAmount} ${originCurrency.code}`}
           </p>
         </div>
+      )}
+
+      {isInstallable && (
+        <button onClick={installApp} className="installButton">Instalar Aplicación</button>
       )}
     </div>
   );
