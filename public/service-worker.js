@@ -5,9 +5,9 @@ self.addEventListener('install', (e) => {
       return cache.addAll([
         '/',
         '/index.html',
-        '/static/js/bundle.js',
-        '/static/js/0.chunk.js',
-        '/static/js/main.chunk.js',
+        '/manifest.json',
+        '/logo192.png',
+        '/favicon.ico',
       ]);
     })
   );
