@@ -18,39 +18,50 @@ function App() {
   const [showResult, setShowResult] = useState(false);
   const [originCurrency, setOriginCurrency] = useState(currencies[0]);
   const [foreignCurrency, setForeignCurrency] = useState(currencies[1]);
-  const [showInstallButton, setShowInstallButton] = useState(false);
-  
+  const [installPromptEvent, setInstallPromptEvent] = useState(null);
+  const [isInstalled, setIsInstalled] = useState(false);
+
   useEffect(() => {
     if (originCurrency.code === foreignCurrency.code) {
       const nextIndex = currencies.findIndex((currency) => currency.code !== originCurrency.code);
       setForeignCurrency(currencies[nextIndex]);
     }
-
-    const isInstalled = localStorage.getItem('isInstalled');
-    setShowInstallButton(!isInstalled);
   }, [originCurrency, foreignCurrency]);
 
-  const handleInstall = () => {
-    if ('beforeinstallprompt' in window) {
-      const installPromptEvent = new Event('beforeinstallprompt');
-      window.dispatchEvent(installPromptEvent);
-    } else {
-      alert('Tu navegador no admite la instalación de aplicaciones.');
-    }
-  };
-
   useEffect(() => {
-    const handleBeforeInstallPrompt = (event) => {
+    const beforeInstallPromptListener = (event) => {
       event.preventDefault();
-      setShowInstallButton(true);
+      setInstallPromptEvent(event);
     };
 
-    window.addEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
+    window.addEventListener("beforeinstallprompt", beforeInstallPromptListener);
 
     return () => {
-      window.removeEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
+      window.removeEventListener(
+        "beforeinstallprompt",
+        beforeInstallPromptListener
+      );
     };
   }, []);
+
+  const handleInstallPWA = async () => {
+    if (!installPromptEvent) {
+      return;
+    }
+
+    installPromptEvent.prompt();
+
+    const { outcome } = await installPromptEvent.userChoice;
+
+    if (outcome === "accepted") {
+      console.log("User accepted the install prompt");
+    } else {
+      console.log("User dismissed the install prompt");
+    }
+
+    setInstallPromptEvent(null);
+    setIsInstalled(true);
+  };
 
   const handleConvert = (value) => {
     setAmountToConvert(value);
@@ -172,10 +183,10 @@ function App() {
         </div>
       )}
 
-      {showInstallButton && (
+      {isInstalled && (
         <div className="install-button-container">
-          <button className="install-button" onClick={handleInstall}>
-            Agregar como acceso directo
+          <button className="install-button" onClick={handleInstallPWA}>
+            Agregar como aplicación
           </button>
         </div>
       )}
