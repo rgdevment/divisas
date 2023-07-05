@@ -24,14 +24,13 @@ function App() {
       const nextIndex = currencies.findIndex((currency) => currency.code !== originCurrency.code);
       setForeignCurrency(currencies[nextIndex]);
     }
-  }, [originCurrency]);
+  }, [originCurrency, foreignCurrency]);
 
   const handleConvert = (value) => {
     setAmountToConvert(value);
     if (purchaseValue && saleValue && value) {
       const amountInUSD = Number(value) / Number(saleValue);
       const result = Math.round(amountInUSD * Number(purchaseValue));
-      const formattedAmountToConvert = numeral(value).format('$0,0');
       const formattedConvertedAmount = numeral(result).format('$0,0');
       setConvertedAmount(formattedConvertedAmount);
       setShowResult(true);
