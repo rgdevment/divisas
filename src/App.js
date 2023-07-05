@@ -18,13 +18,39 @@ function App() {
   const [showResult, setShowResult] = useState(false);
   const [originCurrency, setOriginCurrency] = useState(currencies[0]);
   const [foreignCurrency, setForeignCurrency] = useState(currencies[1]);
-
+  const [showInstallButton, setShowInstallButton] = useState(false);
+  
   useEffect(() => {
     if (originCurrency.code === foreignCurrency.code) {
       const nextIndex = currencies.findIndex((currency) => currency.code !== originCurrency.code);
       setForeignCurrency(currencies[nextIndex]);
     }
+
+    const isInstalled = localStorage.getItem('isInstalled');
+    setShowInstallButton(!isInstalled);
   }, [originCurrency, foreignCurrency]);
+
+  const handleInstall = () => {
+    if ('beforeinstallprompt' in window) {
+      const installPromptEvent = new Event('beforeinstallprompt');
+      window.dispatchEvent(installPromptEvent);
+    } else {
+      alert('Tu navegador no admite la instalación de aplicaciones.');
+    }
+  };
+
+  useEffect(() => {
+    const handleBeforeInstallPrompt = (event) => {
+      event.preventDefault();
+      setShowInstallButton(true);
+    };
+
+    window.addEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
+
+    return () => {
+      window.removeEventListener('beforeinstallprompt', handleBeforeInstallPrompt);
+    };
+  }, []);
 
   const handleConvert = (value) => {
     setAmountToConvert(value);
@@ -143,6 +169,14 @@ function App() {
           <p>
             {`${formattedAmountToConvert} ${foreignCurrency.code} equivale a ${convertedAmount} ${originCurrency.code}`}
           </p>
+        </div>
+      )}
+
+      {showInstallButton && (
+        <div className="install-button-container">
+          <button className="install-button" onClick={handleInstall}>
+            Agregar como acceso directo
+          </button>
         </div>
       )}
     </div>
