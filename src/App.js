@@ -20,7 +20,10 @@ function App() {
   const [foreignCurrency, setForeignCurrency] = useState(currencies[1]);
   const [isInstallable, setIsInstallable] = useState(false);
   const [deferredPrompt, setDeferredPrompt] = useState(null);
-  
+  const [conversionHistory, setConversionHistory] = useState(
+    JSON.parse(localStorage.getItem('conversionHistory')) || []
+  );
+
   window.addEventListener('beforeinstallprompt', (e) => {
     e.preventDefault();
     setDeferredPrompt(e);
@@ -44,14 +47,34 @@ function App() {
     }
   }, [originCurrency, foreignCurrency]);
 
-  const handleConvert = (value) => {
-    setAmountToConvert(value);
-    if (purchaseValue && saleValue && value) {
-      const amountInUSD = Number(value) / Number(saleValue);
+  const handleConvertClick = () => {
+    if (purchaseValue && saleValue && amountToConvert) {
+      const amountInUSD = Number(amountToConvert) / Number(saleValue);
       const result = Math.round(amountInUSD * Number(purchaseValue));
       const formattedConvertedAmount = numeral(result).format('$0,0');
       setConvertedAmount(formattedConvertedAmount);
       setShowResult(true);
+
+      // Agregar la conversión al historial
+      setConversionHistory((prevHistory) => {
+        const newHistory = [
+          {
+            date: new Date(),
+            originCurrency: originCurrency.code,
+            foreignCurrency: foreignCurrency.code,
+            purchaseValue,
+            saleValue,
+            amountToConvert,
+            convertedAmount: formattedConvertedAmount,
+          },
+          ...prevHistory,
+        ];
+
+        // Guardar el historial en localStorage
+        localStorage.setItem('conversionHistory', JSON.stringify(newHistory));
+
+        return newHistory;
+      });
     } else {
       setShowResult(false);
     }
@@ -119,7 +142,7 @@ function App() {
       </div>
 
       <div className="form">
-        <div className="form-field">
+        <div className="input-group">
           <label htmlFor="purchaseValue">Compra dolar en {originCurrency.name}:</label>
           <input
             id="purchaseValue"
@@ -127,11 +150,11 @@ function App() {
             type="number"
             value={purchaseValue}
             onChange={(e) => handleInputChange(e, setPurchaseValue)}
+            placeholder='Valor de 1 dólar en divisa local'
           />
-          <span className="input-description">Valor de 1 dólar en tu divisa</span>
         </div>
 
-        <div className="form-field">
+        <div className="input-group">
           <label htmlFor="saleValue">Venta Dolar en {foreignCurrency.name}:</label>
           <input
             id="saleValue"
@@ -139,21 +162,23 @@ function App() {
             type="number"
             value={saleValue}
             onChange={(e) => handleInputChange(e, setSaleValue)}
+            placeholder='Valor de 1 dólar en divisa extranjera'
           />
-          <span className="input-description">Valor de 1 dólar en divisa extranjera</span>
         </div>
 
-        <div className="form-field">
+        <div className="input-group">
           <label htmlFor="amountToConvert">Cantidad de {foreignCurrency.code} a convertir:</label>
           <input
             id="amountToConvert"
             className="input"
             type="number"
             value={amountToConvert}
-            onChange={(e) => handleConvert(e.target.value)}
+            onChange={(e) => handleInputChange(e, setAmountToConvert)}
           />
         </div>
       </div>
+
+      <button className="convertButton" onClick={handleConvertClick}>Convertir</button>
 
       {showResult && (
         <div className="result">
@@ -167,7 +192,22 @@ function App() {
       {isInstallable && (
         <button onClick={installApp} className="installButton">Instalar Aplicación</button>
       )}
-    </div>
+
+      <div className="conversionHistory">
+        <h2>Historial de conversiones</h2>
+        {conversionHistory.map((conversion, index) => (
+          <div key={index} className="conversionCard">
+            <p><strong>Fecha:</strong> {new Date(conversion.date).toLocaleString()}</p>
+            <p><strong>Origen:</strong> {numeral(conversion.saleValue).format('$0,0')} * {conversion.foreignCurrency} </p>
+            <p><strong>Destino:</strong> {numeral(conversion.purchaseValue).format('$0,0')} * {conversion.originCurrency}</p>
+            <p><strong>Cantidad:</strong> {numeral(conversion.amountToConvert).format('$0,0')} {conversion.foreignCurrency}</p>
+            <p><strong>Resultado:</strong> {conversion.convertedAmount} {conversion.originCurrency}</p>
+          </div>
+        ))}
+      </div>
+
+
+  </div>
   );
 }
 

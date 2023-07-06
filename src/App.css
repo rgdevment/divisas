@@ -1,17 +1,21 @@
 body {
-  background-color: #f2f2f2;
+  background-color: #f0f0f0;
+  font-family: Arial, sans-serif;
 }
 
 .App {
   text-align: center;
-  background-color: #f5f5f5;
+  background-color: #fff;
   padding: 20px;
+  max-width: 800px;
+  margin: 20px auto;
   border-radius: 8px;
   box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 h1 {
-  font-size: 24px;
+  font-size: 28px;
+  color: #333;
   margin-bottom: 20px;
 }
 
@@ -19,75 +23,144 @@ h1 {
   display: flex;
   justify-content: center;
   margin-bottom: 20px;
+  width: 100%;
 }
 
 .currency-selector .form-field {
-  margin-right: 10px;
+  width: 45%;
+  margin-right: 10px; /* Agrega margen derecho entre los select */
 }
 
-.form {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.form-field {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  margin-bottom: 20px;
-}
-
-.label {
-  font-size: 18px;
+.form-field label {
+  display: block;
   margin-bottom: 5px;
-}
-
-.input {
-  width: 300px;
-  padding: 10px;
-  font-size: 16px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-}
-
-.input-description {
-  font-size: 12px;
   color: #888;
-  font-style: italic;
-  margin-top: 3px;
+  font-weight: bold;
+}
+
+.select-container {
+  width: 100%;
 }
 
 .select {
-  width: 150px;
+  width: 100%;
+  font-size: 16px;
   padding: 10px;
-  font-size: 16px;
-  border: 1px solid #ccc;
+  border: 1px solid #ddd;
   border-radius: 4px;
+  background: #f8f8f8;
+  color: #333;
 }
 
-.result {
-  margin-top: 20px;
+.input-group {
+  width: 80%;
+  margin: 20px auto;
 }
 
-.result h2 {
-  font-size: 20px;
-  margin-bottom: 10px;
+.input-group label {
+  display: block;
+  margin-bottom: 5px;
+  color: #888;
+  font-weight: bold;
+  text-align: left;
 }
 
-.result p {
+.input-group input[type="number"],
+.input-group select,
+.input-group button {
+  width: 100%;
   font-size: 16px;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  background: #f8f8f8;
+  color: #333;
+  box-sizing: border-box;
+}
+
+.input-group input::placeholder,
+.input-group select::placeholder {
+  color: #aaa;
+}
+
+.input-group button {
+  margin-top: 20px;
+  background-color: #4caf50;
+  color: #fff;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.input-group button:hover {
+  background-color: #45a049;
+}
+
+.input-group select {
+  appearance: none;
+}
+
+.input-group select::-ms-expand {
+  display: none;
+}
+
+.conversionCard {
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
+  padding: 20px;
+  margin-bottom: 20px;
+  background-color: #f8f8f8;
+  transition: box-shadow 0.3s ease;
+}
+
+.conversionCard:hover {
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+.conversionCard p {
+  font-size: 16px;
+  line-height: 1.6;
+}
+
+.conversionCard p strong {
+  font-weight: 600;
+  margin-right: 10px;
+}
+
+.convertButton {
+  width: 80%;
+  bottom: 20px;
+  right: 20px;
+  padding: 10px 20px;
+  font-size: 14px;
+  border: none;
+  border-radius: 8px;
+  background-color: #4caf50;
+  color: #fff;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.convertButton:hover {
+  background-color: #45a049;
 }
 
 .installButton {
-  background-color: #4CAF50; /* verde */
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  padding: 10px 20px;
+  font-size: 14px;
   border: none;
-  color: white;
-  padding: 15px 32px;
-  text-align: center;
-  text-decoration: none;
-  display: inline-block;
-  font-size: 16px;
-  margin: 4px 2px;
+  border-radius: 8px;
+  background-color: #4caf50;
+  color: #fff;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
   cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.installButton:hover {
+  background-color: #45a049;
 }
