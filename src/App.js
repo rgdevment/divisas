@@ -155,7 +155,7 @@ function App() {
         </div>
 
         <div className="input-group">
-          <label htmlFor="saleValue">Venta Dolar {foreignCurrency.name} (venta):</label>
+          <label htmlFor="saleValue">Valor Dolar {foreignCurrency.name} (venta):</label>
           <input
             id="saleValue"
             className="input"
