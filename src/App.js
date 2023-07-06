@@ -143,26 +143,26 @@ function App() {
 
       <div className="form">
         <div className="input-group">
-          <label htmlFor="purchaseValue">Compra dolar en {originCurrency.name}:</label>
+          <label htmlFor="purchaseValue">Valor Dolar {originCurrency.name} (compra):</label>
           <input
             id="purchaseValue"
             className="input"
             type="number"
             value={purchaseValue}
             onChange={(e) => handleInputChange(e, setPurchaseValue)}
-            placeholder='Valor de 1 dólar en divisa local'
+            placeholder='Valor de 1 dólar'
           />
         </div>
 
         <div className="input-group">
-          <label htmlFor="saleValue">Venta Dolar en {foreignCurrency.name}:</label>
+          <label htmlFor="saleValue">Venta Dolar {foreignCurrency.name} (venta):</label>
           <input
             id="saleValue"
             className="input"
             type="number"
             value={saleValue}
             onChange={(e) => handleInputChange(e, setSaleValue)}
-            placeholder='Valor de 1 dólar en divisa extranjera'
+            placeholder='Valor de 1 dólar'
           />
         </div>
 
@@ -198,8 +198,8 @@ function App() {
         {conversionHistory.map((conversion, index) => (
           <div key={index} className="conversionCard">
             <p><strong>Fecha:</strong> {new Date(conversion.date).toLocaleString()}</p>
-            <p><strong>Origen:</strong> {numeral(conversion.saleValue).format('$0,0')} * {conversion.foreignCurrency} </p>
-            <p><strong>Destino:</strong> {numeral(conversion.purchaseValue).format('$0,0')} * {conversion.originCurrency}</p>
+            <p><strong>Origen:</strong> valor U$S {conversion.foreignCurrency}: {numeral(conversion.saleValue).format('$0,0')}</p>
+            <p><strong>Destino:</strong> valor U$S {conversion.originCurrency}: {numeral(conversion.purchaseValue).format('$0,0')}</p>
             <p><strong>Cantidad:</strong> {numeral(conversion.amountToConvert).format('$0,0')} {conversion.foreignCurrency}</p>
             <p><strong>Resultado:</strong> {conversion.convertedAmount} {conversion.originCurrency}</p>
           </div>
